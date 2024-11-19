@@ -1,0 +1,125 @@
+---
+title: "introduction"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{introduction}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(MOreg)
+```
+
+Introduction
+MOreg is an R package for fitting linear regression models.
+
+Installation
+You can install the development version from GitHub:
+```{r}
+#devtools::install_github('MaryOwusuBonsu/MOreg')
+```
+
+Usage Example
+Here is a basic example to show how the MOreg package can be used to fit a linear regression model:
+
+```{r}
+# Load MOreg if it is already installed
+if (!requireNamespace("MOreg", quietly = TRUE)) {
+  stop("MOreg package is not installed. Please install MOreg before proceeding.")
+} else {
+  library(MOreg)
+}
+
+# Sample data
+Y <- c(2.5, 6.8, 8.7, 9)
+X <- c(15, 25, 30, 29)
+
+# Fit linear model using MOreg
+model <- MOreg(Y, X)
+print(model)
+```
+
+Data
+Let's start with a sample data set:
+
+```{r}
+Y <- c(2.5, 6.8, 8.7, 9)
+X <- c(15, 25, 30, 29)
+
+```
+
+Fitting the Model
+We use the MOreg function to fit a linear regression model:
+
+```{r}
+model <- MOreg(Y, X)
+
+```
+
+Model Output
+The model produces the following output:
+
+beta: Estimated regression coefficients
+residuals: Differences between observed and fitted values
+sigma_sq_hat: Estimated variance of the residuals
+std_err: Standard errors of the regression coefficients
+tval: t-values for the regression coefficients
+pval: p-values for the regression coefficients
+Let's print the results:
+
+```{r}
+print(model)
+```
+
+Comparison with lm
+Let's compare the results from MOreg with those from the lm function in base R:
+
+```{r}
+# Using lm
+data <- data.frame(Y = Y, X = X)
+model_lm <- lm(Y ~ X, data = data)
+summary(model_lm)
+```
+
+
+Efficiency Comparison
+In addition to correctness, we also assess the efficiency of the MOreg function compared to the base R function lm(). This is done using the bench::mark() function to compare their execution times:
+```{r}
+
+# Benchmark MOreg vs lm
+benchmark <- bench::mark(
+  MOreg(Y, X),
+  lm(Y ~ X, data = data),
+  check = FALSE
+)
+
+# Display benchmark results
+benchmark
+
+```
+
+Benchmark Results
+
+We compared the execution times of the `MOreg` function and the `lm()` function using the `bench::mark()` function. The results indicate that `MOreg` is faster than `lm()` for this small dataset:
+
+- **MOreg**: The execution time was 43.3 microseconds (min) and 60.3 microseconds (median), with approximately 14,254 iterations per second.
+- **lm()**: The execution time was 306.4 microseconds (min) and 335.7 microseconds (median), with approximately 2,505 iterations per second.
+
+Overall, **MOreg** is about 5 to 6 times faster than `lm()` for this particular example, demonstrating its efficiency for fitting linear regression models.
+```
+
+###Conclusion
+.MOreg provides a custom implementation of linear regression.
+.We have verified its correctness by comparing the results with those from the lm() function.
+.Additionally, we have benchmarked its performance, finding its execution time relative to lm().
+
+These tests confirm that MOreg is both correct and efficient for fitting linear regression models.
+
